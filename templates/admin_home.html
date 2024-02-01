@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>مدیریت محصولات</title>
+    <style>
+        body {
+            font-family: 'Tahoma', sans-serif;
+            margin: 0;
+            overflow: auto;
+            transition: background-color 0.5s;
+            background: #000;
+            color: white;
+        }
+
+        .snow {
+            color: white;
+            font-size: 3em;
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -20%;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        .flake {
+            position: fixed;
+            top: -20%;
+            animation: fall 10s linear infinite;
+        }
+
+        .flake:nth-last-of-type(0) {
+            left: 0%;
+            animation-delay: 0s;
+        }
+
+        .flake:nth-last-of-type(1) {
+            left: 0%;
+            animation-delay: 0s;
+        }
+
+        .flake:nth-last-of-type(2) {
+            left: 10%;
+            animation-delay: 3s;
+        }
+
+        .flake:nth-last-of-type(3) {
+            left: 20%;
+            animation-delay: 5s;
+        }
+
+        .flake:nth-last-of-type(4) {
+            left: 30%;
+            animation-delay: 2s;
+        }
+
+        .flake:nth-last-of-type(5) {
+            left: 40%;
+            animation-delay: 1s;
+        }
+
+        .flake:nth-last-of-type(6) {
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        .flake:nth-last-of-type(7) {
+            left: 60%;
+            animation-delay: 3s;
+        }
+
+        .flake:nth-last-of-type(8) {
+            left: 70%;
+            animation-delay: 2s;
+        }
+
+        .flake:nth-last-of-type(9) {
+            left: 80%;
+            animation-delay: 0s;
+        }
+
+        .flake:nth-last-of-type(10) {
+            left: 90%;
+            animation-delay: 6s;
+        }
+        li {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 50px;
+        }
+        li {
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 20000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        form {
+            display: flex;
+            align-items: center;
+        }
+        input[type="submit"] {
+            background-color: #dc3545;
+            color: white;
+            cursor: pointer;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        input[type="submit"]:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .navigation button {
+            margin: 0 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .navigation button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="snow">
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❆ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❆ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❆ </div>
+    <div class="flake"> ❅ </div>
+</div>
+
+<div class="navigation">
+    <button onclick="window.location.href='/home'">دیدن محصولات</button>
+    <button onclick="window.location.href='/add'">افزودن محصولات</button>
+    <button onclick="window.location.href='/settings'">تنظیمات</button>
+</div>
+
+<h1>محصولات</h1>
+<ul>
+    {% for product in products %}
+        <li>
+            {{ product[1] }} - {{ product[2] }} تومان
+            <form action="{{ url_for('delete_product', product_id=product[0]) }}" method="post">
+                <input type="submit" value="حذف محصول">
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.delete-form').submit(function (event) {
+            event.preventDefault();
+            var form = $(this);
+            var productId = form.attr('action').split('/').pop();
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                success: function () {
+                    $('#product-name-' + productId).text('');
+                }
+            });
+        });
+    });
+</script>
+
+
+</body>
+</html>

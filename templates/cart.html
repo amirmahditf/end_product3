@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>سبد خرید</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 40px;
+            background: lightblue;
+            overflow: hidden;
+        }
+
+        .snow {
+            color: white;
+            font-size: 3em;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -20%;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        .flake {
+            position: fixed;
+            top: -20%;
+            animation: fall 10s linear infinite;
+        }
+
+        .flake:nth-last-of-type(0) {
+            left: 0%;
+            animation-delay: 0s;
+        }
+
+        .flake:nth-last-of-type(1) {
+            left: 0%;
+            animation-delay: 0s;
+        }
+
+        .flake:nth-last-of-type(2) {
+            left: 10%;
+            animation-delay: 3s;
+        }
+
+        .flake:nth-last-of-type(3) {
+            left: 20%;
+            animation-delay: 5s;
+        }
+
+        .flake:nth-last-of-type(4) {
+            left: 30%;
+            animation-delay: 2s;
+        }
+
+        .flake:nth-last-of-type(5) {
+            left: 40%;
+            animation-delay: 1s;
+        }
+
+        .flake:nth-last-of-type(6) {
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        .flake:nth-last-of-type(7) {
+            left: 60%;
+            animation-delay: 3s;
+        }
+
+        .flake:nth-last-of-type(8) {
+            left: 70%;
+            animation-delay: 2s;
+        }
+
+        .flake:nth-last-of-type(9) {
+            left: 80%;
+            animation-delay: 0s;
+        }
+
+        .flake:nth-last-of-type(10) {
+            left: 90%;
+            animation-delay: 6s;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .delete-btn:hover {
+            background-color: #d43f3f;
+        }
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .navigation button {
+            margin: 0 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .navigation button:hover {
+            background-color: #0056b3;
+        }
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+        }
+        .add-to-order-text {
+            display: block;
+            margin-top: 5px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .order-btn {
+            display: block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4caf50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .order-btn:hover {
+            background-color: #45a049;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        p {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="snow">
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❆ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❆ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❅ </div>
+    <div class="flake"> ❆ </div>
+    <div class="flake"> ❅ </div>
+</div>
+
+<div class="navigation">
+    <button onclick="window.location.href='/home'">صفحه محصولات</button>
+    <button onclick="window.location.href='/cart'">مشاهده سبد خرید</button>
+    <button onclick="window.location.href='/settings'">تنظیمات</button>
+</div>
+
+{% if cart_items %}
+    <table>
+        <thead>
+            <tr>
+                <th>نام محصول</th>
+                <th>قیمت</th>
+                <th>تعداد</th>
+                <th>حذف</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_id, details in cart_items.items() %}
+                <tr>
+                    <td>{{ details['name'] }}</td>
+                    <td>{{ details['price'] }} تومان</td>
+                    <td>
+                        <div class="quantity-container">
+                            <form class="update-form">
+                                <input type="hidden" class="product-id" value="{{ product_id }}">
+                                <input type="hidden" class="max-stock" value="{{ details['max_stock'] }}">
+                                <input class="quantity-input" type="number" name="quantity" min="1" max="{{ details['max_stock'] }}" value="{{ details['quantity'] }}">
+                                <button type="submit" class="update-btn">بروزرسانی تعداد</button>
+                            </form>
+                            <span class="add-to-order-text">افزودن به تعداد سفارش</span>
+                        </div>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('remove_from_cart', product_id=product_id) }}" method="post">
+                            <input class="delete-btn" type="submit" value="حذف">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>مجموع قیمت: {{ total_price }} تومان</p>
+{% else %}
+    <p>سبد خرید شما خالی است.</p>
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $(".update-form").on("submit", function(e) {
+            e.preventDefault();
+    
+            var form = $(this);
+            var quantityInput = form.find(".quantity-input");
+            var productId = form.find(".product-id").val();
+            var maxStock = form.find(".max-stock").val();
+    
+            $.ajax({
+                type: "POST",
+                url: "/update_cart/" + productId,
+                data: {
+                    quantity: quantityInput.val(),
+                    max_stock: maxStock
+                },
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                }
+            });
+        });
+
+        $(".add-to-order-text").on("click", function() {
+            alert("افزودن به تعداد سفارش انجام شد!");
+        });
+
+var orderButton = $("<button>")
+    .text("سفارش")
+    .addClass("order-btn")
+    .on("click", function() {
+        alert("سفارش شما با موفقیت ثبت شد!");
+    });
+
+$("body").append(orderButton); 
+    });
+</script>
+
+</body>
+</html>

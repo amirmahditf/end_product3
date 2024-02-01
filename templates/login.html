@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+            padding: 20px;
+            border-radius: 20px;
+            position: relative;
+            background-color: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            color: #00bfff;
+        }
+
+        .title::before,
+        .title::after {
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background-color: #00bfff;
+        }
+
+        .title::before {
+            margin-right: 5px;
+        }
+
+        .title::after {
+            margin-left: 5px;
+        }
+
+        .message,
+        .signin {
+            font-size: 14.5px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .signin {
+            text-align: center;
+        }
+
+        .signin a:hover {
+            text-decoration: underline royalblue;
+        }
+
+        .signin a {
+            color: #00bfff;
+        }
+
+        .flex {
+            display: flex;
+            width: 100%;
+            gap: 6px;
+        }
+
+        .form label {
+            position: relative;
+        }
+
+        .form label .input {
+            background-color: #333;
+            color: #fff;
+            width: 100%;
+            padding: 20px 10px 10px;
+            outline: 0;
+            border: 1px solid rgba(105, 105, 105, 0.397);
+            border-radius: 10px;
+        }
+
+        .form label .input + span {
+            color: rgba(255, 255, 255, 0.5);
+            position: absolute;
+            left: 10px;
+            top: 0px;
+            font-size: 0.9em;
+            cursor: text;
+            transition: 0.3s ease;
+        }
+
+        .form label .input:placeholder-shown + span {
+            top: 12.5px;
+            font-size: 0.9em;
+        }
+
+        .form label .input:focus + span,
+        .form label .input:valid + span {
+            color: #00bfff;
+            top: 0px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .input {
+            font-size: medium;
+        }
+
+        .submit {
+            border: none;
+            outline: none;
+            padding: 10px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            transform: .3s ease;
+            background-color: #00bfff;
+        }
+
+        .submit:hover {
+            background-color: #00bfff96;
+        }
+
+        #error-message {
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #FF0000;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="error-message" class="hidden"></div>
+
+    <form class="form" method="POST" action="/login" onsubmit="return validateLogin()">
+        <p class="title">Login</p>
+        <div class="flex">
+            <label>
+                <input class="input" type="text" placeholder="" required="" name="username_or_email">
+                <span>Username or Email</span>
+            </label>
+        </div>
+
+        <label>
+            <input class="input" type="password" placeholder="" required="" name="password">
+            <span>Password</span>
+        </label>
+
+        <button class="submit" type="submit" onclick="validateForm()">Submit</button>
+        <p class="signin">Don't have an account? <a href="/register">Sign up</a> </p>
+
+    </form>
+
+    <script>
+        function showError(message) {
+            document.getElementById('error-message').innerText = message;
+            document.getElementById('error-message').classList.remove('hidden');
+        }
+
+        function hideError() {
+            document.getElementById('error-message').classList.add('hidden');
+        }
+
+        function validateForm() {
+            var isValid = true;
+
+            if (!isValid) {
+                showError('Validation failed. Please check your inputs.');
+            } else {
+                hideError();
+                window.location.href = "/home";
+            }
+        }
+    </script>
+    <script>
+        function validateLogin() {
+            var email = document.getElementById('username_or_email').value;
+            var password = document.getElementById('password').value;
+    
+            if (email === 'amir.mahdi.avh@gmail.com' && password === '123123123') {
+                hideError();
+                window.location.href = "/admin_home";
+                return false;
+            } else {
+                showError('Invalid credentials. Please check your email and password.');
+                return false;
+            }
+        }
+    </script>
+    
+</body>
+
+</html>

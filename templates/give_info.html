@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Page</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+            padding: 20px;
+            border-radius: 20px;
+            position: relative;
+            background-color: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            color: #00bfff;
+        }
+
+        .title::before,
+        .title::after {
+            content: "";
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background-color: #00bfff;
+        }
+
+        .title::before {
+            margin-right: 5px;
+        }
+
+        .title::after {
+            margin-left: 5px;
+        }
+
+        .message,
+        .signin {
+            font-size: 14.5px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .signin {
+            text-align: center;
+        }
+
+        .signin a:hover {
+            text-decoration: underline royalblue;
+        }
+
+        .signin a {
+            color: #00bfff;
+        }
+
+        .flex {
+            display: flex;
+            width: 100%;
+            gap: 6px;
+        }
+
+        .form label {
+            position: relative;
+        }
+
+        .form label .input {
+            background-color: #333;
+            color: #fff;
+            width: 100%;
+            padding: 20px 10px 10px;
+            outline: 0;
+            border: 1px solid rgba(105, 105, 105, 0.397);
+            border-radius: 10px;
+        }
+
+        .form label .input + span {
+            color: rgba(255, 255, 255, 0.5);
+            position: absolute;
+            left: 10px;
+            top: 0px;
+            font-size: 0.9em;
+            cursor: text;
+            transition: 0.3s ease;
+        }
+
+        .form label .input:placeholder-shown + span {
+            top: 12.5px;
+            font-size: 0.9em;
+        }
+
+        .form label .input:focus + span,
+        .form label .input:valid + span {
+            color: #00bfff;
+            top: 0px;
+            font-size: 0.7em;
+            font-weight: 600;
+        }
+
+        .input {
+            font-size: medium;
+        }
+
+        .submit {
+            border: none;
+            outline: none;
+            padding: 10px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            transform: .3s ease;
+            background-color: #00bfff;
+        }
+
+        .submit:hover {
+            background-color: #00bfff96;
+        }
+
+        .flex label.phone {
+            display: flex;
+            align-items: center;
+        }
+
+        .flex label.phone .input {
+            width: calc(100% - 38px);
+        }
+
+        .flex label.phone span {
+            width: 38px;
+        }
+
+        .input.phone-prefix {
+            width: 30px;
+            padding: 20px 10px 10px;
+            outline: 0;
+            border: 1px solid rgba(105, 105, 105, 0.397);
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            font-size: 1em;
+        }
+
+        
+        #error-message {
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #FF0000;
+            margin-bottom: 10px;
+            display: none; 
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #validation-message {
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #4CAF50;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="error-message" class="hidden"></div>
+
+    <div id="validation-message" class="hidden"></div>
+
+    <form class="form" method="POST" action="/register" onsubmit="return validateForm()">
+        <p class="title">Register </p>
+        <p class="message">Signup now and get full access to our app. </p>
+        <div class="flex">
+            <label>
+                <input class="input" type="text" placeholder="" required="" name="username">
+                <span>Username</span>
+            </label>
+        </div>
+
+        <div class="flex">
+            <label>
+                <input class="input" type="text" placeholder="" required="" name="firstname">
+                <span>Firstname</span>
+            </label>
+
+            <label>
+                <input class="input" type="text" placeholder="" required="" name="lastname">
+                <span>Lastname</span>
+            </label>
+        </div>
+
+        <label>
+            <input class="input" type="email" placeholder="" required="" name="email">
+            <span>Email</span>
+        </label>
+
+        <label class="phone">
+            <input class="input phone-prefix" type="text" placeholder="+98" readonly>
+            <input class="input" type="text" placeholder="" required="" name="phone_number">
+            <span>Phone Number</span>
+        </label>
+
+        <label>
+            <input class="input" type="password" placeholder="" required="" name="password" pattern=".{8,}" title="Password must be at least 8 characters long">
+            <span>Password</span>
+        </label>
+
+        <label>
+            <input class="input" type="password" placeholder="" required="" name="confirm_password" pattern=".{8,}" title="Password must be at least 8 characters long">
+            <span>Confirm password</span>
+        </label>
+
+        <button class="submit" type="submit">Submit</button>
+        <p class="signin">Already have an account? <a href="/login">Sign in</a> </p>
+    </form>
+
+    <script>
+        function showError(message) {
+            document.getElementById('error-message').innerText = message;
+            document.getElementById('error-message').style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        function showValidationMessage(message) {
+            document.getElementById('validation-message').innerText = message;
+            document.getElementById('validation-message').style.display = 'block';
+        }
+
+        function hideValidationMessage() {
+            document.getElementById('validation-message').style.display = 'none';
+        }
+
+        function validateForm() {
+            var password = document.getElementsByName('password')[0].value;
+            var confirmPassword = document.getElementsByName('confirm_password')[0].value;
+
+            if (password !== confirmPassword) {
+                showError('Password and confirm password do not match.');
+                return false;
+            }
+
+            hideError();
+            showValidationMessage('Form is valid. Submitting...');
+            setTimeout(function () {
+                hideValidationMessage();
+            }, 3000);
+            return true;
+        }
+    </script>
+</body>
+
+</html>
